@@ -10,9 +10,9 @@ date
 # to test other revisions. If you do this, also set TRY_GIT_REV to some sane
 # git-equivalent of the revision because most likely it won't find anything in the mapfile.
 # This defaults to the most recent searchfox indexing run for mozilla-central.
-REVISION_TREE=mozilla-central       # replace with e.g. 'try' for testing
-REVISION_ID=latest                  # replace with e.g. 'revision.ee64db93dcc149da9313460317257b8c42eec5b2' for testing
-TRY_GIT_REV=                        # set to some gecko-dev SHA matching the above rev for testing
+REVISION_TREE=try ## replace with e.g. 'try' for testing
+REVISION_ID=revision.df9ae3e32a29678b28fe4bde0b1bdc5f655a4558  # replace with e.g. 'revision.ee64db93dcc149da9313460317257b8c42eec5b2' for testing
+TRY_GIT_REV=7169ec18844f3e53b14d43f1fa9613caee6eecf2                       # set to some gecko-dev SHA matching the above rev for testing
 export INDEX_RUSTLIB=yes            # opt in to downloading the rustlib analysis in fetch-tc-artifacts.sh
 
 # The next line populates the INDEXED_HG_REV and INDEXED_GIT_REV env vars.
