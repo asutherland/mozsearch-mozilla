@@ -3,6 +3,7 @@
 
   "trees": {
     "mozilla-central": {
+      "platforms": "linux64",
       "index_path": "$WORKING/mozilla-central",
       "files_path": "$WORKING/mozilla-central/gecko-dev",
       "git_path": "$WORKING/mozilla-central/gecko-dev",
