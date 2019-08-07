@@ -65,7 +65,7 @@ fi
 
 # The generated file was not the same across all platforms, so
 # put the different versions in __$PLATFORM__ subfolders.
-for PLATFORM in linux64 macosx64 win64 android-armv7; do
+for PLATFORM in ${PLATFORMS:-linux64 macosx64 win64 android-armv7}; do
     if [ ! -f "generated-$PLATFORM/$GENERATED_FILE" ]; then
         exit 0
     fi
