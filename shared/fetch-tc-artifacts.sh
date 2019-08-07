@@ -25,7 +25,7 @@ REVISION="${REVISION_TREE}.revision.${INDEXED_HG_REV}"
 # we're indexing. But do them in parallel by emitting all the curl commands into
 # a file and then feeding it to GNU parallel.
 echo "${CURL} https://index.taskcluster.net/v1/task/gecko.v2.$REVISION.source.source-bugzilla-info/artifacts/public/components-normalized.json > bugzilla-components.json" > downloads.lst
-for PLATFORM in linux64 macosx64 win64 android-armv7; do
+for PLATFORM in ${PLATFORMS:-linux64 macosx64 win64 android-armv7}; do
     # First check that the the searchfox job exists for the platform and revision we want. Otherwise emit a warning and skip it. This
     # file is small so it's cheap to download and spew to stdout as a check that the analysis data for the platform exists.
     ${CURL} https://index.taskcluster.net/v1/task/gecko.v2.$REVISION.firefox.$PLATFORM-searchfox-debug/artifacts/public/build/target.json ||
