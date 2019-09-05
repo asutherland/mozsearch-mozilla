@@ -10,9 +10,9 @@ date
 # to test other revisions. If you do this, also set TRY_GIT_REV to some sane
 # git-equivalent of the revision because most likely it won't find anything in the mapfile.
 # This defaults to the most recent searchfox indexing run for mozilla-central.
-REVISION_TREE=mozilla-central       # replace with e.g. 'try' for testing
-REVISION_ID=latest                  # replace with e.g. 'revision.ee64db93dcc149da9313460317257b8c42eec5b2' for testing
-TRY_GIT_REV=                        # set to some gecko-dev SHA matching the above rev for testing
+REVISION_TREE=try # replace with e.g. 'try' for testing
+REVISION_ID=revision.7e464b889edbd73eec4f7c74ab03048254ee459e # replace with e.g. 'revision.ee64db93dcc149da9313460317257b8c42eec5b2' for testing
+TRY_GIT_REV=b382be941d93baf6f04b16a1d5ded7dd0dc978bc                        # set to some gecko-dev SHA matching the above rev for testing
 
 # The next line populates the INDEXED_HG_REV and INDEXED_GIT_REV env vars.
 source $CONFIG_REPO/shared/resolve-gecko-revs.sh $REVISION_TREE $REVISION_ID
