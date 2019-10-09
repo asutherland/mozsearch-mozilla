@@ -47,5 +47,6 @@ sort analysis-files.list | uniq | parallel --halt now,fail=1 "RUST_LOG=info $MOZ
 
 date
 
+# NO, THIS IS USEFUL.
 # Free up disk space, we don't need these per-platform analysis files any more.
-rm -rf analysis-*
+#rm -rf analysis-*
