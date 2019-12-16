@@ -53,3 +53,8 @@ for BRANCH in beta release esr60 esr68; do
 done
 
 date
+
+# checkout gecko-docs-overlay to get experimental docs
+pushd $INDEX_ROOT
+git clone https://github.com/asutherland/gecko-docs-overlay.git
+popd

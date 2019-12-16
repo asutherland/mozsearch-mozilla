@@ -17,6 +17,17 @@ repo_path = config['trees'][tree_name]['files_path']
 stdout = run('git ls-files --recurse-submodules', shell=True, cwd=repo_path)
 lines = stdout.split('\n')
 
+
+overlay = []
+# mozilla-central gecko-docs-overlay hack
+# (alternately, we could see if gecko-docs-overlay exists?)
+if tree_name == 'mozilla-central':
+    index_path = config['trees'][tree_name]['index_path']
+    stdout = run('git ls-files', shell=True, cwd=os.path.join(index_path, 'gecko-docs-overlay/docs'))
+    # Yes, this is a little silly for us to have a list that we don't process
+    # when we could pass the string through.
+    overlay = stdout.split('\n')
+
 # Comm-central has a mozilla/ subrepo
 if tree_name == 'comm-central':
     stdout = run('git ls-files', shell=True, cwd=os.path.join(repo_path, 'mozilla'))
@@ -79,3 +90,8 @@ open(os.path.join(index_path, 'ipdl-files'), 'w').writelines(ipdl)
 
 open(os.path.join(index_path, 'ipdl-includes'), 'w').write(' '.join([ '-I ' + d for d in ipdl_dirs ]))
 
+# This is a hack to support gecko-docs-overlay.  The idea is that this file list
+# contains files that will end up showing up on disk and should be included in
+# directory listing, but that are not produced as part of the default indexing
+# sweep and so can't exist in repo-files or objdir-files
+open(os.path.join(index_path, 'overlay-files'), 'w').writelines([l + '\n' for l in overlay])
