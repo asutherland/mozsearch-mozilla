@@ -8,7 +8,7 @@ if [ $# -ne 2 ]; then
     echo "Usage: $0 <branch> <git-rev>"
     echo " e.g.: $0 master 26bd1e060c5bf1f2f3f3c7f34fae152380cda29c"
     echo " e.g.: $0 beta ''"
-    echo " If the git rev is an empty string, defaults to origin/<branch> or projects/<branch>"
+    echo " If the git rev is an empty string, defaults to unified/bookmarks/<branch> or ash/branches/<branch>"
     exit 1
 fi
 
@@ -29,20 +29,14 @@ popd
 
 date
 
-echo Downloading git to hg map
-$CONFIG_REPO/shared/fetch-hg-map.sh
-
-date
-
 echo Updating git
 pushd $GIT_ROOT
-git fetch origin
-git remote show projects || git remote add projects https://github.com/mozilla/gecko-projects.git
-git fetch projects
+git fetch unified
+git fetch ash
 if [ -n "$INDEXED_GIT_REV" ]; then
     git checkout -B "$BRANCH" $INDEXED_GIT_REV
 else
-    git checkout -B "$BRANCH" "origin/$BRANCH" || git checkout -B "$BRANCH" "projects/$BRANCH"
+    git checkout -B "$BRANCH" "unified/bookmarks/$BRANCH" || git checkout -B "$BRANCH" "ash/branches/default/tip"
 fi
 popd
 
@@ -54,7 +48,7 @@ echo "Generating blame information..."
 pushd $BLAME_ROOT
 git reset --soft "$BRANCH"
 popd
-python $MOZSEARCH_PATH/blame/transform-repo.py $GIT_ROOT $BLAME_ROOT $WORKING/git_hg.map
+CINNABAR=1 python $MOZSEARCH_PATH/blame/transform-repo.py $GIT_ROOT $BLAME_ROOT
 
 date
 

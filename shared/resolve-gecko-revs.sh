@@ -15,9 +15,6 @@ fi
 REVISION_TREE=$1
 REVISION_ID=$2
 
-echo Downloading git to hg map
-$CONFIG_REPO/shared/fetch-hg-map.sh
-
 date
 
 REVISION="${REVISION_TREE}.${REVISION_ID}"
@@ -30,6 +27,6 @@ INDEXED_HG_REV=$(python $MOZSEARCH_PATH/scripts/read-json.py target.json moz_sou
 if [ -n "$TRY_GIT_REV" ]; then
     INDEXED_GIT_REV=$TRY_GIT_REV
 else
-    INDEXED_GIT_REV=$(awk -v REV=$INDEXED_HG_REV '$2 ~ REV { print $1 }' "${WORKING}/git_hg.map")
+    INDEXED_GIT_REV=$(git cinnabar hg2git $INDEXED_HG_REV)
 fi
 popd

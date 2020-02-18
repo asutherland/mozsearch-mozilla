@@ -25,7 +25,7 @@ source $CONFIG_REPO/shared/resolve-gecko-revs.sh $REVISION_TREE $REVISION_ID
 # blame on the latest gecko-dev that we do have. In practice this scenario rarely
 # gets hit.
 
-$CONFIG_REPO/shared/checkout-gecko-repos.sh "master" "$INDEXED_GIT_REV"
+$CONFIG_REPO/shared/checkout-gecko-repos.sh "central" "$INDEXED_GIT_REV"
 
 if [ -n "$INDEXED_GIT_REV" ]; then
     pushd $INDEX_ROOT
@@ -46,10 +46,10 @@ fi
 for BRANCH in beta release esr60 esr68 ash; do
     echo "Updating gecko-dev branch $BRANCH to latest from upstream..."
     pushd $GIT_ROOT
-    git branch -f $BRANCH origin/$BRANCH || git branch -f $BRANCH projects/$BRANCH
+    git branch -f $BRANCH unified/bookmarks/$BRANCH || git branch -f $BRANCH ash/branches/default/tip
     popd
     echo "Generating blame information for $BRANCH..."
-    BLAME_REF="refs/heads/$BRANCH" python $MOZSEARCH_PATH/blame/transform-repo.py $GIT_ROOT $BLAME_ROOT $WORKING/git_hg.map
+    CINNABAR=1 BLAME_REF="refs/heads/$BRANCH" python $MOZSEARCH_PATH/blame/transform-repo.py $GIT_ROOT $BLAME_ROOT
 done
 
 date
