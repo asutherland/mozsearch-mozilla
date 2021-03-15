@@ -10,6 +10,8 @@ date
 REVISION_TREE=mozilla-central
 REVISION_ID=latest
 
+TRYPUSH_REV=70a58e5ae6a7138bcb457e1300e75928d648c38d
+
 # Set TRYPUSH_REV in the environment to e.g. ee64db93dcc149da9313460317257b8c42eec5b2
 # or whatever to test a try revision. It needs to be the full rev hash, so that we can
 # find the artifacts in taskcluster.
