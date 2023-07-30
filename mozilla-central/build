@@ -11,3 +11,43 @@ $CONFIG_REPO/shared/process-gecko-analysis.sh
 popd
 
 date
+
+# Analyze the unified python corpus
+pushd $GIT_ROOT/python
+# Absolute paths aren't treated as absolute but instead concatenated, so we need
+# to use just a filename and then move it after.
+rtx exec nodejs@18 -- scip-python index --project-name python --output python.scip
+mv python.scip $INDEX_ROOT
+popd
+
+date
+
+# Find all the JS islands identified by "package.json"; if they have a jsconfig.json
+# we would not want to `--infer-tsconfig`, but currently these do not exist in the
+# m-c tree, so we don't need to care.
+#
+# Our find command prints out just the dirname where we found the "package.json",
+# which will be "." for the root and which we will want to ignore, so we use grep
+# for that.  (Specifically, the package.json at the root of m-c is useless for
+# our purposes, it just expresses devDependencies and we do not want
+# typescript to treat the entire tree as a single JS project root because it
+# categorically is not.)
+JS_SCIP_ROOT=$INDEX_ROOT/js-scips
+SCRATCH_CONFIG_FILE=$WORKING/config-scratch.json
+mkdir -p $JS_SCIP_ROOT
+pushd $GIT_ROOT
+find * -name package.json -printf '%h\n' | grep -v '^\.$' | while read -r dir; do
+    # Use the path as the basis for our name for this index.  "foo/bar/baz" will
+    # become "foo__bar__baz".
+    SCIP_KEY=${dir//\//__}
+    SCIP_FILE=${JS_SCIP_ROOT}/${SCIP_KEY}.scip
+    pushd $dir
+    # Run the indexer and add an entry to our config file if it succeeds.
+    rtx exec nodejs@18 -- scip-typescript index --output ${SCIP_FILE} --infer-tsconfig && \
+      jq ".trees[\"mozilla-central\"][\"scip_subtrees\"][\"$SCIP_KEY\"] = { \"scip_index_path\": \"$SCIP_FILE\", \"subtree_root\": \"$dir\"}" $CONFIG_FILE > $SCRATCH_CONFIG_FILE && \
+      mv $SCRATCH_CONFIG_FILE $CONFIG_FILE || true
+    popd
+done
+popd
+
+date
